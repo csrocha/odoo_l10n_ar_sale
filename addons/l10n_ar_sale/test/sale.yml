@@ -1,0 +1,31 @@
+-
+ New sale order.
+-
+  !record {model: sale.order, id: sale_order_1}:
+    partner_id: par_cf_gm
+    note: Invoice after delivery
+    payment_term: account.account_payment_term
+    order_line: 
+      - product_id: product.product_product_7
+        product_uom_qty: 8
+
+-
+  I confirm the Quotation with "On Demand" order policy.
+-
+  !workflow {model: sale.order, action: order_confirm, ref: sale_order_1}
+-
+  I check that Invoice should not created.
+-
+  !python {model: sale.order}: |
+    sale_order = self.browse(cr, uid, ref("sale_order_1"))
+    assert len(sale_order.invoice_ids) == False, "Invoice should not created."
+-
+  I create advance invoice where type is 'Invoice all the Sale Order'.
+-
+  !python {model: sale.advance.payment.inv}: |
+    ctx = context.copy()
+    ctx.update({"active_model": 'sale.order', "active_ids": [ref("sale_order_1")], "active_id":ref("sale_order_1")})
+    pay_id = self.create(cr, uid, {'advance_payment_method': 'all'})
+    self.create_invoices(cr, uid, [pay_id], context=ctx)  
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
