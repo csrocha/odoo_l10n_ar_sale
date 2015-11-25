@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_afip_document_class_sale","afip.document_class.saleman","l10n_ar_invoice.model_afip_document_class","base.group_sale_salesman",1,0,0,0
+"access_afip_responsability_relation_sale","afip.responsability_relation.saleman","l10n_ar_invoice.model_afip_responsability_relation","base.group_sale_salesman",1,0,0,0
+"access_afip_journal_class_sale","afip.journal_class.saleman","l10n_ar_invoice.model_afip_journal_class","base.group_sale_salesman",1,0,0,0

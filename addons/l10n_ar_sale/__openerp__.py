@@ -30,7 +30,7 @@
     'name': 'Sale Adaptation for Argentina',
     'test': ['test/partners.yml',
              'test/sale.yml'],
-    'data': [],
+    'data': ['security/ir.model.access.csv'],
     'version': '2.7.244',
     'website': 'https://launchpad.net/~openerp-l10n-ar-localization'}
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
