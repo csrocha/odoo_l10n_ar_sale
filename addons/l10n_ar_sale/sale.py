@@ -19,33 +19,36 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
+from openerp import models, api
+from openerp.exceptions import Warning
 
-class sale_order(osv.osv):
+
+class sale_order(models.Model):
     _name = 'sale.order'
     _inherit = 'sale.order'
 
+    @api.v7
     def _prepare_invoice(self, cr, uid, order, lines, context=None):
         """
         """
         if context is None:
             context = {}
-        invoice_vals = super(sale_order, self)._prepare_invoice(cr, uid, order, lines, context)
+        invoice_vals = super(sale_order, self)._prepare_invoice(
+            cr, uid, order, lines, context)
 
         partner_obj = self.pool.get('res.partner')
         partner_id = invoice_vals['partner_id']
         company_id = invoice_vals['company_id']
 
-        journal_ids = partner_obj.prefered_journals(cr, uid, [partner_id], company_id, 'out_invoice')
+        journal_ids = partner_obj.prefered_journals(
+            cr, uid, [partner_id], company_id, 'out_invoice')
 
         if not journal_ids or not journal_ids[partner_id]:
-            raise osv.except_osv(_('Error!'),
-                _('Please define sales journal for this company: "%s" (id:%d).') % (order.company_id.name, order.company_id.id))
+            raise Warning('Please define sales journal for this company:'
+                          ' "%s" (id:%d).' %
+                          (order.company_id.name, order.company_id.id))
 
         invoice_vals['journal_id'] = journal_ids[partner_id][0]
-
-        # Care for deprecated _inv_get() hook - FIXME: to be removed after 6.1
-        invoice_vals.update(self._inv_get(cr, uid, order, context=context))
         return invoice_vals
 
 sale_order()
