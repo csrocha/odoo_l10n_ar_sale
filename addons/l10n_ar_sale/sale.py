@@ -41,7 +41,9 @@ class sale_order(models.Model):
         company_id = invoice_vals['company_id']
 
         journal_ids = partner_obj.prefered_journals(
-            cr, uid, [partner_id], company_id, 'out_invoice')
+            cr, uid, [partner_id], 'out_invoice',
+            {'company_id': company_id}
+        )
 
         if not journal_ids or not journal_ids[partner_id]:
             raise Warning('Please define sales journal for this company:'
